@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="70">
+                <div id="top" class="ui-wideget-header ui-corner-all">
+                    <ui:insert name="top">Top</ui:insert>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" rendered="true" collapsible="true" resizable="true" closable="true" header="Menu">
+                <h:form>
+                    <p:commandButton value="Nuovo Utente" actionListener="#{utentiBean.nuovoUtente(actionEvent)}" onclick="dlgUtente.show()"/>
+                </h:form>
+            </p:layoutUnit>   
+
+            <p:layoutUnit position="center">
+                
+                <h:form id="formUtenti" prependId="false">
+
+                    <p:dialog widgetVar="dlgUtente" resizable="false" header="Nuovo Utente" height="250" width="400">
+                        <p:panelGrid columns="2" id="pnlCreate" >
+                            <h:outputText value="UserId" />
+                            <p:inputText id="UserId" value="#{utentiBean.selectedUtenti.userId}" /> 
+                            <h:outputText value="Password" />
+                            <p:inputText id="Password" value="#{utentiBean.selectedUtenti.userPwd}" /> 
+                            <h:outputText value="Nome" />
+                            <p:inputText id="Nome" value="#{utentiBean.selectedUtenti.firstName}" /> 
+                            <h:outputText value="Cognome" />
+                            <p:inputText id="Cognome" value="#{utentiBean.selectedUtenti.lastName}" /> 
+
+                            <p:commandButton value="Salva" id="utenteSalva" actionListener="#{utentiBean.btnCreteUtente(actionEvent)}" 
+                                             update="utenti" oncomplete="dlgUtente.hide()"/>
+                        </p:panelGrid>
+                    </p:dialog>
+
+                    <p:dialog widgetVar="dlgUtenteUpdate" resizable="false" header="Modifica Utente" height="250" width="400">
+                        <p:panelGrid columns="2" id="pnlUpdate">
+                            <h:outputText value="UserId" />
+                            <p:inputText id="UserIdU" value="#{utentiBean.selectedUtenti.userId}" /> 
+                            <h:outputText value="Password" />
+                            <p:inputText id="PasswordU" value="#{utentiBean.selectedUtenti.userPwd}" /> 
+                            <h:outputText value="Nome" />
+                            <p:inputText id="NomeU" value="#{utentiBean.selectedUtenti.firstName}" /> 
+                            <h:outputText value="Cognome" />
+                            <p:inputText id="CognomeU" value="#{utentiBean.selectedUtenti.lastName}" /> 
+
+                            <p:commandButton value="Salva" id="utenteUpdate" update=":formUtenti:pnlUpdate, utenti" actionListener="#{utentiBean.btnUpdateUtente(actionEvent)}" 
+                                             onclick="dlgUtenteUpdste.hide()"/>
+                        </p:panelGrid>
+                    </p:dialog>
+
+                    <p:dataTable id="utenti" value="#{utentiBean.listaUtenti}" var="utenti">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="UserId" /> 
+                            </f:facet>
+                            <h:outputText value="#{utenti.userId}" />    
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Password" /> 
+                            </f:facet>
+                            <h:outputText value="#{utenti.userPwd}" />    
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome" /> 
+                            </f:facet>
+                            <h:outputText value="#{utenti.firstName}" />    
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cognome" /> 
+                            </f:facet>
+                            <h:outputText value="#{utenti.lastName}" />    
+                        </p:column>
+
+                        <p:column>
+
+                            <p:commandButton id="updateButton" update=":formUtenti:pnlUpdate" oncomplete="dlgUtenteUpdate.show()" icon="ui-icon-pencil" title="Modifica">  
+                                <f:setPropertyActionListener value="#{utenti}" target="#{utentiBean.selectedUtenti}" />  
+                            </p:commandButton>  
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
+

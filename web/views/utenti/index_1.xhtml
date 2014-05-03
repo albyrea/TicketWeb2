@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" /> 
+                <h:form>
+                    <p:commandButton id="btnUtenteCreate" update=":formCreate" oncomplete="DialogUtentiCreate.show()" icon="ui-icon-plus" title="Nuovo" value="Nuovo"/>  
+                </h:form>
+                <h:form id="formDataTable">  
+                    <p:dataTable id="listaUtenti" var="utenti" value="#{utentiBean.listaUtenti}">  
+                        <p:column headerText="UserId" style="width:24%">  
+                            <h:outputText value="#{utenti.userId}" />  
+                        </p:column>  
+                        <p:column headerText="Password" style="width:24%">  
+                            <h:outputText value="#{utenti.userPwd}" />  
+                        </p:column>  
+                        <p:column headerText="Nome" style="width:24%">  
+                            <h:outputText value="#{utenti.firstName}" />  
+                        </p:column>  
+                        <p:column headerText="Cognome" style="width:24%">  
+                            <h:outputText value="#{utenti.lastName}" />  
+                        </p:column>  
+                        <p:column style="width:4%">  
+                            <p:commandButton id="btnUtenteUpdate" update=":formUpdate" oncomplete="DialogUtentiUpdate.show()" icon="ui-icon-pencil" title="Modifica">  
+                                <f:setPropertyActionListener value="#{utenti}" target="#{utentiBean.selectedUtenti}" />  
+                            </p:commandButton>  
+                            <p:commandButton id="btnUtenteDelete" update=":formDelete" oncomplete="DialogUtentiDelete.show()" icon="ui-icon-trash" title="Elimina">  
+                                <f:setPropertyActionListener value="#{utenti}" target="#{utentiBean.selectedUtenti}" />  
+                            </p:commandButton> 
+                        </p:column>  
+                    </p:dataTable>  
+                </h:form>
+
+                <h:form id="formCreate">
+                    <p:dialog header="Nuovo Utente" widgetVar="DialogUtentiCreate" resizable="false" id="dlgUtentiCreate"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+                            <h:outputText value="UsarId" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.userId}" />  
+
+                            <h:outputText value="Pasasword" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.userPwd}" />  
+
+                            <h:outputText value="Nome" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.firstName}" />  
+
+                            <h:outputText value="Cognome" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.lastName}" />  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateOK" update=":formDataTable, :msgs" oncomplete="DialogUtentiCreate.hide()"
+                                                 actionListener="#{utentiBean.btnCreteUtente(actionEvent)}" icon="ui-icon-save" title="Salva" value="Salva"/>
+
+
+                                <p:commandButton id="btnCreateKO" oncomplete="DialogUtentiCreate.hide()" icon="ui-icon-cancel" title="Annulla" value="Annulla"/>
+                            </f:facet>
+                        </h:panelGrid>  
+                    </p:dialog>  
+                </h:form>
+
+                <h:form id="formUpdate">
+                    <p:dialog header="Modifica Utente" widgetVar="DialogUtentiUpdate" resizable="false" id="dlgUtentiUpdate"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+                            <h:outputText value="UsarId" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.userId}" />  
+
+                            <h:outputText value="Pasasword" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.userPwd}" />  
+
+                            <h:outputText value="Nome" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.firstName}" />  
+
+                            <h:outputText value="Cognome" />  
+                            <p:inputText value="#{utentiBean.selectedUtenti.lastName}" />  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnUpdateOK" update=":formDataTable, :msgs" oncomplete="DialogUtentiUpdate.hide()" icon="ui-icon-save" title="Salva" value="Salva"/>
+                                <p:commandButton id="btnUpdateKO" oncomplete="DialogUtentiUpdate.hide()" icon="ui-icon-cancel" title="Annulla" value="Annulla"/>
+                            </f:facet>
+                        </h:panelGrid>  
+                    </p:dialog>  
+                </h:form>
+
+                <h:form id="formDelete">
+                    <p:confirmDialog id="confirmDialog" message="Confermi Cancellazione ?" header="Cancellazione Utente" showEffect="fade" hideEffect="explode"
+                                     severity="alert" widgetVar="DialogUtentiDelete" >
+                        <p:commandButton id="confirm" value="Conferma" update=":msgs" oncomplete="DialogUtentiDelete.hide()" actionListener="#{utentiBean.btnDeleteUtente()}" />
+                        <p:commandButton id="decline" value="Annulla" onclick="DialogUtentiDelete.hide()" type="button" />
+                    </p:confirmDialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
